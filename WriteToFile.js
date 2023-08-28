@@ -1,7 +1,11 @@
-const newman = require('newman'); //														node scripts/WriteToFile.js в папке node.js
+const newman = require('newman'); 	//node scripts/WriteToFile.js в папке node.js
 const fs = require('fs');
 
-const org = "FSO";																					//Поменять название ведомства
+const org = "FSO";		//Поменять название ведомства
+
+org_inuse = org;
+if(org == "FSO") {
+org_inuse="FSB";}
 
 fs.readdir("scripts/"+org, function(err, files) {	// Очистка папки
     if (err) {
@@ -20,13 +24,13 @@ fs.readdir("scripts/"+org, function(err, files) {	// Очистка папки
 });
 
 const names = [];
-names.push("Динамо", "Самара", "Ахмат", "Спартак", "Краснодар", "Сочи", "Локомотив", "Оренбург");	//Поменять название матчей
+names.push("Name1", "Name2", "Name3", "Name4", "Name5", "Name6", "Name7", "Name8");	//Поменять название матчей
 // call newman.run to pass `options` object and wait for callback
 newman.run({
-    collection: require('./FSBTickets.postman_collection.json'),									//Поменять коллекцию
+    collection: require("./"+org_inuse+"Tickets.postman_collection.json"),
     reporters: 'cli',
 	environment: require('./TestEnv.json'),
-	iterationData: require('./TicketsFSB.json'),													//Поменять входные данные
+	iterationData: require("./Tickets"+org_inuse+".json"),
 	iterationCount: names.length
 }).on('request', (error, data) => {
 	if (error) {
